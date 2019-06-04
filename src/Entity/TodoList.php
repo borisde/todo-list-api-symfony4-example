@@ -3,9 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TodoListRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class TodoList
 {
@@ -18,6 +20,8 @@ class TodoList
 
     /**
      * @ORM\Column(type="string", length=50)
+     *
+     * @Assert\NotBlank(message="This value should not be blank.")
      */
     private $title;
 
@@ -63,13 +67,13 @@ class TodoList
     }
 
     /**
-     * @param \DateTimeInterface $createdAt
+     * @ORM\PrePersist
      *
      * @return TodoList
      */
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAtValue(): self
     {
-        $this->createdAt = $createdAt;
+        $this->createdAt = new \DateTime();
 
         return $this;
     }

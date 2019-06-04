@@ -25,3 +25,20 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # this required to fix "You must enable the SensioFrameworkExtraBundle view annotations to use the ViewResponseListener" error
+    sensio_framework_extra.view.listener:
+        alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
+
+    # this configuration is required for correct serialization of entity private properties
+    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
+        public: false
+        tags:
+        - { name: 'serializer.normalizer' }
+
+    Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        public: false
+        tags:
+        - { name: 'serializer.normalizer' }
