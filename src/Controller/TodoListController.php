@@ -32,7 +32,7 @@ class TodoListController extends AbstractFOSRestController
     /**
      * @Rest\Post("/lists")
      */
-    public function postListAction(Request $request): View
+    public function postListsAction(Request $request): View
     {
         $list = new TodoList();
         $form = $this->createForm(TodoListType::class, $list);
