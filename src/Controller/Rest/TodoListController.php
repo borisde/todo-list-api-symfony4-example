@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\Controller\Rest;
 
 use App\Form\TodoListType;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +11,7 @@ use App\Entity\TodoList;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
-
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 /**
  * @Route("/api", name="api_")
@@ -20,11 +20,13 @@ class TodoListController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get("/lists")
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      */
     public function getListsAction(): View
     {
         $repository = $this->getDoctrine()->getRepository(TodoList::class);
-        $lists      = $repository->findall();
+        $lists      = $repository->findAll();
+        $c = count($lists);
 
         return $this->view($lists, Response::HTTP_OK);
     }
@@ -45,7 +47,7 @@ class TodoListController extends AbstractFOSRestController
             $em->persist($list);
             $em->flush();
 
-            return $this->view(['status' => 'ok'], Response::HTTP_CREATED);
+            return $this->view(['code'=> Response::HTTP_CREATED, 'message' => 'Created'], Response::HTTP_CREATED);
         }
 
         return $this->view($form, Response::HTTP_BAD_REQUEST);
@@ -53,17 +55,19 @@ class TodoListController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/lists/{listId}")
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
      */
     public function getListAction(int $listId): View
     {
         $repository = $this->getDoctrine()->getRepository(TodoList::class);
         $list       = $repository->find($listId);
-        if (!$list) {
-            return $this->view(['status' => 'error', 'message' => 'Not found'], Response::HTTP_NOT_FOUND);
 
+        if (!$list) {
+            throw new ResourceNotFoundException('Not found');
         }
 
         return $this->view($list, Response::HTTP_OK);
     }
+
 }
 

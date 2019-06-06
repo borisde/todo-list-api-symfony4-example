@@ -54,6 +54,10 @@ class ListFixtures extends Fixture
         $item->setList($list);
         $manager->persist($item);
 
+        $list = new TodoList();
+        $list->setTitle('Last list');
+        $manager->persist($list);
+
         $manager->flush();
     }
 }

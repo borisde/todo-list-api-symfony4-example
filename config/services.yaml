@@ -30,15 +30,5 @@ services:
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
 
-    # this configuration is required for correct serialization of entity private properties
-    Symfony\Component\Serializer\Normalizer\ObjectNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\ObjectNormalizer
-        public: false
-        tags:
-        - { name: 'serializer.normalizer' }
 
-    Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer:
-        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
-        public: false
-        tags:
-        - { name: 'serializer.normalizer' }
+
