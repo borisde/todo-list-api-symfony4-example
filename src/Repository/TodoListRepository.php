@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\TodoList;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Doctrine\ORM\Query;
 
 /**
  * @method TodoList|null find($id, $lockMode = null, $lockVersion = null)
@@ -26,29 +25,34 @@ class TodoListRepository extends ServiceEntityRepository
     }
 
     /**
-     * Selects all List elements and counts associative Items
+     * Select List elements and explicitly join Items to reduce DB calls on count elements
+     *
+     * @param array $ids
      *
      * @return mixed
      */
-    public function findAllCountItems()
+    public function findListJoinItems(array $ids = [])
     {
         $alias = 'list';
 
-        // select only "real" entity fields WITHOUT associative collection
-        $fieldNames = array_map(function ($v) use ($alias) {
-            return ($alias . '.' . $v);
-        }, $this->getClassMetadata()->getFieldNames());
+        $qb = $this->createQueryBuilder($alias);
+        $qb->addSelect('item')
+            ->leftJoin($alias.'.items', 'item');
 
-        return $this->createQueryBuilder($alias)
-            ->select($fieldNames)
-            ->addSelect('COUNT(i.id) as items_count')
-            ->leftJoin($alias . '.items', 'i')
-            ->groupBy($alias . '.id')
-            ->getQuery()
-            ->getArrayResult()
-            ;
+        if (!empty($ids)) {
+            if (count($ids) == 1)
+                $qb->where($qb->expr()->eq($alias.'.id', '?1'));
+            else
+                $qb->where($qb->expr()->in($alias.'.id', '?1'));
 
+            $qb->setParameter(1, $ids);
+        }
+
+        $result = $qb->getQuery()->getResult();
+
+        return $result;
     }
+
 
     // /**
     //  * @return TodoList[] Returns an array of TodoList objects

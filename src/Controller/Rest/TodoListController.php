@@ -3,6 +3,7 @@
 
 namespace App\Controller\Rest;
 
+use App\Entity\TodoItem;
 use App\Form\TodoListType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,13 +21,13 @@ class TodoListController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get("/lists")
-     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     *
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      */
-    public function getListsAction(): View
+    public function getAllListsAction(): View
     {
         $repository = $this->getDoctrine()->getRepository(TodoList::class);
-        $lists      = $repository->findAll();
-        $c = count($lists);
+        $lists      = $repository->findListJoinItems();
 
         return $this->view($lists, Response::HTTP_OK);
     }
@@ -47,7 +48,7 @@ class TodoListController extends AbstractFOSRestController
             $em->persist($list);
             $em->flush();
 
-            return $this->view(['code'=> Response::HTTP_CREATED, 'message' => 'Created'], Response::HTTP_CREATED);
+            return $this->view(['code' => Response::HTTP_CREATED, 'message' => 'Created'], Response::HTTP_CREATED);
         }
 
         return $this->view($form, Response::HTTP_BAD_REQUEST);
@@ -55,12 +56,12 @@ class TodoListController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/lists/{listId}")
-     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      */
     public function getListAction(int $listId): View
     {
         $repository = $this->getDoctrine()->getRepository(TodoList::class);
-        $list       = $repository->find($listId);
+        $list       = $repository->findListJoinItems([$listId]);
 
         if (!$list) {
             throw new ResourceNotFoundException('Not found');
@@ -69,5 +70,36 @@ class TodoListController extends AbstractFOSRestController
         return $this->view($list, Response::HTTP_OK);
     }
 
+    /**
+     * @Rest\Get("/lists/{listId}/items")
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
+     */
+    public function getListAllItemsAction(int $listId): View
+    {
+        $repository = $this->getDoctrine()->getRepository(TodoList::class);
+        $listItems       = $repository->findListJoinItems([$listId]);
+
+        if (!$listItems) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        return $this->view($listItems, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Get("/lists/{listId}/items/{itemId}")
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     */
+    public function getListItemAction(int $listId, int $itemId): View
+    {
+        $repository = $this->getDoctrine()->getRepository(TodoItem::class);
+        $item       = $repository->findItemJoinList($itemId, $listId);
+
+        if (!$item) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        return $this->view($item, Response::HTTP_OK);
+    }
 }
 

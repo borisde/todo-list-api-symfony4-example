@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TodoListRepository")
@@ -34,15 +34,11 @@ class TodoList
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TodoItem", mappedBy="list", orphanRemoval=true, fetch="EAGER")
-     * @Groups({"items"})
+     * @ORM\OneToMany(targetEntity="App\Entity\TodoItem", mappedBy="list", orphanRemoval=true)
+     *
+     * @JMS\Groups({"items"})
      */
     private $items;
-
-    /**
-     * @var int
-     */
-    private $items_count;
 
     /**
      * TodoList constructor.
@@ -105,6 +101,18 @@ class TodoList
     }
 
     /**
+     * @return int
+     *
+     * @JMS\VirtualProperty()
+     * @JMS\Type("int")
+     * @JMS\Groups({"items_count"})
+     */
+    public function getItemsCount(): int
+    {
+        return $this->items->count();
+    }
+
+    /**
      * @param TodoItem $item
      *
      * @return TodoList
@@ -136,24 +144,5 @@ class TodoList
 
         return $this;
     }
-
-    /**
-     * @return int
-     */
-    public function getItemsCount(): int
-    {
-        return $this->items_count;
-    }
-
-    /**
-     * @ORM\PostLoad
-     */
-    public function setItemsCount(): void
-    {
-        // get collection size after entity load
-        $this->items_count = $this->items->count();
-    }
-
-
 }
 

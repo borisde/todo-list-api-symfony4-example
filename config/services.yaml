@@ -29,6 +29,3 @@ services:
     # this required to fix "You must enable the SensioFrameworkExtraBundle view annotations to use the ViewResponseListener" error
     sensio_framework_extra.view.listener:
         alias: Sensio\Bundle\FrameworkExtraBundle\EventListener\TemplateListener
-
-
-
