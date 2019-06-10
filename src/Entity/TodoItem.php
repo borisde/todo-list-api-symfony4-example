@@ -21,7 +21,7 @@ class TodoItem
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TodoList", inversedBy="items")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      *
      * @JMS\Groups({"list"})
      */

@@ -34,7 +34,7 @@ class TodoList
     private $createdAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\TodoItem", mappedBy="list", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\TodoItem", mappedBy="list")
      *
      * @JMS\Groups({"items"})
      */
