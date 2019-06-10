@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TodoItemRepository")
@@ -22,6 +22,8 @@ class TodoItem
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TodoList", inversedBy="items")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @JMS\Groups({"list"})
      */
     private $list;
 

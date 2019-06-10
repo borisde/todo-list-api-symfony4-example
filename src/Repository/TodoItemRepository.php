@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\TodoItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception\ServerException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -46,8 +47,20 @@ class TodoItemRepository extends ServiceEntityRepository
             ->setParameter(1, $itemId)
             ->setParameter(2, $listId)
             ->getQuery()
-            ->getResult()
-            ;
+            ->getResult();
+    }
+
+
+    /**
+     * @param TodoItem $item
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function delete(TodoItem $item): void
+    {
+        $this->_em->remove($item);
+        $this->_em->flush();
     }
 
     // /**

@@ -88,7 +88,7 @@ class TodoListController extends AbstractFOSRestController
 
     /**
      * @Rest\Get("/lists/{listId}/items/{itemId}")
-     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "list"})
      */
     public function getListItemAction(int $listId, int $itemId): View
     {
@@ -100,6 +100,28 @@ class TodoListController extends AbstractFOSRestController
         }
 
         return $this->view($item, Response::HTTP_OK);
+    }
+
+    /**
+     * @Rest\Delete("/lists/{listId}/items/{itemId}")
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     */
+    public function deleteListItemAction(int $listId, int $itemId): View
+    {
+        $repository = $this->getDoctrine()->getRepository(TodoItem::class);
+        $item = $repository->findOneBy([
+            'id' => $itemId,
+            'list' => $listId,
+        ]);
+
+        if (!$item) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        $repository->delete($item);
+
+        // 204 HTTP NO CONTENT response. The object is deleted.
+        return $this->view('Item deleted', Response::HTTP_NO_CONTENT);
     }
 }
 
