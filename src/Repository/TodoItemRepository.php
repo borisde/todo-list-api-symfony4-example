@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\TodoItem;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\DBAL\Exception\ServerException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -24,7 +23,6 @@ class TodoItemRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, TodoItem::class);
     }
-
 
     /**
      * Select Item element and explicitly join List to reduce DB calls
@@ -50,7 +48,6 @@ class TodoItemRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-
     /**
      * @param TodoItem $item
      *
@@ -62,6 +59,20 @@ class TodoItemRepository extends ServiceEntityRepository
         $this->_em->remove($item);
         $this->_em->flush();
     }
+
+
+    /**
+     * @param TodoItem $item
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function create(TodoItem $item): void
+    {
+        $this->_em->persist($item);
+        $this->_em->flush();
+    }
+
 
     // /**
     //  * @return TodoItem[] Returns an array of TodoItem objects
