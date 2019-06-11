@@ -1,0 +1,8 @@
+todo_list:
+  type:     rest
+  resource: 'App\Controller\Rest\TodoListController'
+
+todo_item:
+  type:     rest
+  resource: 'App\Controller\Rest\TodoItemController'
+  parent:   todo_list
