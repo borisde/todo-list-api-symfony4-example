@@ -38,7 +38,6 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
         return $this->view($listItems, Response::HTTP_OK);
     }
 
-
     /**
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
@@ -68,7 +67,9 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
 
         $this->getTodoItemRepository()->create($item);
 
-        return $this->view(['code' => Response::HTTP_CREATED, 'message' => 'Created'], Response::HTTP_CREATED);
+        $location = $request->getPathInfo().'/'.$item->getId();
+
+        return $this->view($item, Response::HTTP_CREATED, ['Location' => $location]);
     }
 
     /**
@@ -118,7 +119,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
         $repository->delete($item);
 
         // 204 HTTP NO CONTENT response. The object is deleted.
-        return $this->view('Deleted', Response::HTTP_NO_CONTENT);
+        return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

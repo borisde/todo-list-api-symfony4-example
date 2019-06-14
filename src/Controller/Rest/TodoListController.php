@@ -48,9 +48,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
             return $this->view($form, Response::HTTP_BAD_REQUEST);
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($list);
-        $em->flush();
+        $this->getTodoListRepository()->create($list);
 
         $location = $request->getPathInfo().'/'.$list->getId();
 
@@ -97,7 +95,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
         $repository->delete($list);
 
         // 204 HTTP NO CONTENT response. The object is deleted.
-        return $this->view('Deleted', Response::HTTP_NO_CONTENT);
+        return $this->view(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
