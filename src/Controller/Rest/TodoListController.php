@@ -32,6 +32,8 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
+     * 
      * @param Request $request
      *
      * @return View
@@ -50,7 +52,9 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
         $em->persist($list);
         $em->flush();
 
-        return $this->view(['code' => Response::HTTP_CREATED, 'message' => 'Created'], Response::HTTP_CREATED);
+        $location = $request->getPathInfo().'/'.$list->getId();
+
+        return $this->view($list, Response::HTTP_CREATED, ['Location' => $location]);
     }
 
     /**
