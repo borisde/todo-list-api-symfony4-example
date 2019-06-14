@@ -2,7 +2,7 @@ default:
     suites:
         default:
             contexts:
-            - RestApiContext
+            - JsonApiContext
 
     extensions:
         Behat\Symfony2Extension:
