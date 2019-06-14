@@ -1,0 +1,16 @@
+default:
+    suites:
+        default:
+            contexts:
+            - RestApiContext
+
+    extensions:
+        Behat\Symfony2Extension:
+            kernel:
+                bootstrap: features/bootstrap/bootstrap.php
+                class: App\Kernel
+        Imbo\BehatApiExtension:
+            apiClient:
+                base_uri: http://localhost
+                timeout: 15.0
+                verify: false
