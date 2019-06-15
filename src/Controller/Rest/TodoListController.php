@@ -56,6 +56,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\Get(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      *
      * @param int $listId
@@ -75,6 +76,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\Delete(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
      * @param int $listId

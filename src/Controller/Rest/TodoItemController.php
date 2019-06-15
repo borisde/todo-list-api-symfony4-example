@@ -20,6 +20,7 @@ use FOS\RestBundle\View\View;
 class TodoItemController extends AbstractFOSRestController implements ClassResourceInterface
 {
     /**
+     * @Rest\Get(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
      *
      * @param int $listId
@@ -39,6 +40,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\Post(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
      * @param int     $listId
@@ -73,6 +75,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\Get(requirements={"listId" = "\d+", "itemId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "list"})
      *
      * @param int $listId
@@ -93,6 +96,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
     }
 
     /**
+     * @Rest\Delete(requirements={"listId" = "\d+", "itemId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
      * @param int $listId
@@ -138,3 +142,4 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
         return $this->getDoctrine()->getRepository(TodoItem::class);
     }
 }
+
