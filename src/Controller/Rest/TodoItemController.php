@@ -4,8 +4,9 @@
 namespace App\Controller\Rest;
 
 use App\Entity\TodoItem;
-use App\Entity\TodoList;
 use App\Form\TodoItemType;
+use App\Repository\TodoItemRepository;
+use App\Repository\TodoListRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
@@ -20,6 +21,28 @@ use FOS\RestBundle\View\View;
 class TodoItemController extends AbstractFOSRestController implements ClassResourceInterface
 {
     /**
+     * @var TodoListRepository
+     */
+    private $todoListRepository;
+
+    /**
+     * @var TodoItemRepository
+     */
+    private $todoItemRepository;
+
+    /**
+     * TodoItemController constructor.
+     *
+     * @param TodoListRepository $todoListRepository
+     * @param TodoItemRepository $todoItemRepository
+     */
+    public function __construct(TodoListRepository $todoListRepository, TodoItemRepository $todoItemRepository)
+    {
+        $this->todoListRepository = $todoListRepository;
+        $this->todoItemRepository = $todoItemRepository;
+    }
+
+    /**
      * @Rest\Get(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
      *
@@ -29,8 +52,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      */
     public function cgetAction(int $listId): View
     {
-        $repository = $this->getTodoListRepository();
-        $listItems  = $repository->findListJoinItems([$listId]);
+        $listItems = $this->todoListRepository->findListJoinItems([$listId]);
 
         if (!$listItems) {
             throw new ResourceNotFoundException('Not found');
@@ -47,11 +69,12 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      * @param Request $request
      *
      * @return View
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function postAction(int $listId, Request $request): View
     {
-        $repository = $this->getTodoListRepository();
-        $list       = $repository->findOneBy(['id' => $listId]);
+        $list = $this->todoListRepository->findOneBy(['id' => $listId]);
 
         if (!$list) {
             throw new ResourceNotFoundException('Not found');
@@ -67,7 +90,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
             return $this->view($form, Response::HTTP_BAD_REQUEST);
         }
 
-        $this->getTodoItemRepository()->create($item);
+        $this->todoItemRepository->create($item);
 
         $location = $request->getPathInfo().'/'.$item->getId();
 
@@ -85,8 +108,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      */
     public function getAction(int $listId, int $itemId): View
     {
-        $repository = $this->getTodoItemRepository();
-        $item       = $repository->findItemJoinList($itemId, $listId);
+        $item = $this->todoItemRepository->findItemJoinList($itemId, $listId);
 
         if (!$item) {
             throw new ResourceNotFoundException('Not found');
@@ -108,8 +130,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      */
     public function deleteAction(int $listId, int $itemId): View
     {
-        $repository = $this->getTodoItemRepository();
-        $item       = $repository->findOneBy(
+        $item = $this->todoItemRepository->findOneBy(
             [
                 'id'   => $itemId,
                 'list' => $listId,
@@ -120,26 +141,10 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
             throw new ResourceNotFoundException('Not found');
         }
 
-        $repository->delete($item);
+        $this->todoItemRepository->delete($item);
 
         // 204 HTTP NO CONTENT response. The object is deleted.
         return $this->view(null, Response::HTTP_NO_CONTENT);
-    }
-
-    /**
-     * @return object
-     */
-    protected function getTodoListRepository(): object
-    {
-        return $this->getDoctrine()->getRepository(TodoList::class);
-    }
-
-    /**
-     * @return object
-     */
-    protected function getTodoItemRepository(): object
-    {
-        return $this->getDoctrine()->getRepository(TodoItem::class);
     }
 }
 
