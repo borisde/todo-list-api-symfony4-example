@@ -2,7 +2,9 @@ default:
     suites:
         default:
             contexts:
-            - JsonApiContext
+            - FeatureContext:
+                  kernel: '@kernel'
+            - Imbo\BehatApiExtension\Context\ApiContext
 
     extensions:
         Behat\Symfony2Extension:
