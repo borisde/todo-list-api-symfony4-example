@@ -60,7 +60,6 @@ class TodoItemRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
-
     /**
      * @param TodoItem $item
      *

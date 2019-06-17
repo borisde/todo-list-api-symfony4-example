@@ -7,6 +7,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 
 /**
+ * @JMS\AccessorOrder("custom", custom = {"id", "description", "createdAt", "list"})
+ *
  * @ORM\Entity(repositoryClass="App\Repository\TodoItemRepository")
  * @ORM\HasLifecycleCallbacks
  */

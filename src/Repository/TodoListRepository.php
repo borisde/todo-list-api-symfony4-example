@@ -65,6 +65,18 @@ class TodoListRepository extends ServiceEntityRepository
         $this->_em->flush();
     }
 
+    /**
+     * @param TodoList $list
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function create(TodoList $list): void
+    {
+        $this->_em->persist($list);
+        $this->_em->flush();
+    }
+
 
     // /**
     //  * @return TodoList[] Returns an array of TodoList objects
