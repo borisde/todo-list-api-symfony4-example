@@ -25,3 +25,4 @@ fos_rest:
      zone:
         - { path: ^/api/* }
      allowed_methods_listener: true
+     param_fetcher_listener: force

@@ -49,6 +49,24 @@ class TodoItemRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param string $query
+     *
+     * @return mixed
+     */
+    public function searchItems(string $query)
+    {
+        $alias = 'item';
+
+        $qb = $this->createQueryBuilder($alias);
+
+        return $qb->addSelect('list')
+            ->leftJoin($alias.'.list', 'list')
+            ->where($qb->expr()->like($alias.'.description', $qb->expr()->literal('%'.$query.'%')))
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * @param TodoItem $item
      *
      * @throws \Doctrine\ORM\ORMException

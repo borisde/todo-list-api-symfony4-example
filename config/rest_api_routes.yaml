@@ -6,3 +6,7 @@ todo_item:
   type:     rest
   resource: 'App\Controller\Rest\TodoItemController'
   parent:   todo_list
+
+todo_search:
+  type:     rest
+  resource: 'App\Controller\Rest\SearchController'
