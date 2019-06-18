@@ -51,11 +51,6 @@ class SearchController extends AbstractFOSRestController
      *           @Model(type=TodoItem::class, groups={"Default", "list"})
      *     )
      * )
-     * @SWG\Response(
-     *     response=400,
-     *     description="Bad Request",
-     *     @SWG\Schema(ref="#definitions/ErrorBadRequest")
-     * )
      *
      * @param string $query
      *
