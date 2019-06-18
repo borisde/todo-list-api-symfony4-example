@@ -24,14 +24,17 @@ class TodoListRepository extends ServiceEntityRepository
         parent::__construct($registry, TodoList::class);
     }
 
+
     /**
      * Select List elements and explicitly join Items to reduce DB calls on count elements
      *
-     * @param array $ids
+     * @param null $id
      *
      * @return mixed
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findListJoinItems(array $ids = [])
+    public function findListJoinItems($id = null)
     {
         $alias = 'list';
 
@@ -39,18 +42,18 @@ class TodoListRepository extends ServiceEntityRepository
         $qb->addSelect('item')
             ->leftJoin($alias.'.items', 'item');
 
-        if (!empty($ids)) {
-            if (count($ids) === 1)
-                $qb->where($qb->expr()->eq($alias.'.id', '?1'));
-            else
-                $qb->where($qb->expr()->in($alias.'.id', '?1'));
-
-            $qb->setParameter(1, $ids);
+        if (!empty($id)) {
+            $qb->where($qb->expr()->eq($alias.'.id', '?1'));
+            $qb->setParameter(1, $id);
         }
 
-        $result = $qb->getQuery()->getResult();
+        $q = $qb->getQuery();
 
-        return $result;
+        if (!empty($id)) {
+            return $q->getOneOrNullResult();
+        } else {
+            return $q->getResult();
+        }
     }
 
     /**

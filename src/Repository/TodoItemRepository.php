@@ -25,30 +25,6 @@ class TodoItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * Select Item element and explicitly join List to reduce DB calls
-     *
-     * @param int $itemId
-     * @param int $listId
-     *
-     * @return mixed
-     */
-    public function findItemJoinList(int $itemId, int $listId)
-    {
-        $alias = 'item';
-
-        $qb = $this->createQueryBuilder($alias);
-
-        return $qb->addSelect('list')
-            ->leftJoin($alias.'.list', 'list')
-            ->where($qb->expr()->eq($alias.'.id', '?1'))
-            ->andWhere($qb->expr()->eq('list.id', '?2'))
-            ->setParameter(1, $itemId)
-            ->setParameter(2, $listId)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
      * @param string $query
      *
      * @return mixed

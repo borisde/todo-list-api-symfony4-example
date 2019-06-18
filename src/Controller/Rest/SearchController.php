@@ -45,9 +45,7 @@ class SearchController extends AbstractFOSRestController
             $result = $this->todoItemRepository->searchItems($query);
         }
 
-        $cnt = count($result);
-
-        return $this->view(['total_count' => $cnt, 'items' => $result], Response::HTTP_OK);
+        return $this->view($result, Response::HTTP_OK);
     }
 }
 

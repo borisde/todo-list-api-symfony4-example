@@ -38,6 +38,8 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      *
      * @return View
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function cgetAction(): View
     {
@@ -82,7 +84,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
      */
     public function getAction(int $listId): View
     {
-        $list = $this->todoListRepository->findListJoinItems([$listId]);
+        $list = $this->todoListRepository->findOneBy(['id' => $listId]);
 
         if (!$list) {
             throw new ResourceNotFoundException('Not found');
