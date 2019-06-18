@@ -20,8 +20,8 @@ fos_rest:
      body_listener: true
      format_listener:
          rules:
-             - { path: '^/api/.+', priorities: ['json'], fallback_format: json, prefer_extension: false }
+             - { path: '^/api(?!/doc$)', priorities: ['json'], fallback_format: json, prefer_extension: false }
      zone:
-        - { path: '^/api/.+' }
+        - { path: '^/api(?!/doc$)' }
      allowed_methods_listener: true
      param_fetcher_listener: force

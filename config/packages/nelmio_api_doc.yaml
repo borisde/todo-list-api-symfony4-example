@@ -1,0 +1,41 @@
+nelmio_api_doc:
+    documentation:
+        exclude_sections: ["models"]
+        info:
+            title: Todo List API
+            description: An example of ToDo list API built with Symfony 4 and FOSRestBundle.
+            version: 1.0.0
+        definitions:
+            ErrorBadRequest:
+                type: object
+                properties:
+                    code:
+                        type: integer
+                        example: 400
+                    message:
+                        type: string
+                        example: "Validation Failed"
+                    errors:
+                        type: object
+                        properties:
+                            children:
+                                type: object
+                                properties:
+                                    title:
+                                        type: object
+                                        properties:
+                                            errors:
+                                                type: array
+                                                example: ["This value should not be blank."]
+            ErrorNotFound:
+                type: object
+                properties:
+                    code:
+                        type: integer
+                        example: 404
+                    message:
+                        type: string
+                        example: "Not found"
+    areas: # to filter documented areas
+        path_patterns:
+            - ^/api(?!/doc$) # Accepts routes under /api except /api/doc

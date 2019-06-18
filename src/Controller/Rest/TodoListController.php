@@ -13,9 +13,13 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
+
 
 /**
  * @Rest\RouteResource("List")
+ * @SWG\Tag(name="Lists")
  */
 class TodoListController extends AbstractFOSRestController implements ClassResourceInterface
 {
@@ -37,9 +41,19 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
     /**
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Json array with collection of Lists",
+     *     @SWG\Schema(
+     *           type="array",
+     *           @Model(type=TodoList::class, groups={"Default", "items_count"})
+     *     )
+     * )
+     *
      * @return View
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      */
     public function cgetAction(): View
     {
@@ -51,11 +65,28 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
     /**
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      *
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="body",
+     *     @SWG\Schema(ref=@Model(type=TodoListType::class))
+     * )
+     * @SWG\Response(
+     *     response=201,
+     *     description="Json object with created List",
+     *     @Model(type=TodoList::class, groups={"Default", "items_count"})
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Bad Request",
+     *     @SWG\Schema(ref="#definitions/ErrorBadRequest")
+     * )
+     *
      * @param Request $request
      *
      * @return View
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
      */
     public function postAction(Request $request): View
     {
@@ -78,9 +109,27 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
      * @Rest\Get(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items_count"})
      *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Json with List object",
+     *     @Model(type=TodoList::class, groups={"Default", "items_count"})
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
      * @param int $listId
      *
      * @return View
+     *
      */
     public function getAction(int $listId): View
     {
@@ -97,11 +146,28 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
      * @Rest\Delete(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="",
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
      * @param int $listId
      *
      * @return View
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
      */
     public function deleteAction(int $listId): View
     {

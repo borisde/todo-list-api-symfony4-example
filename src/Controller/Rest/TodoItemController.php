@@ -4,6 +4,7 @@
 namespace App\Controller\Rest;
 
 use App\Entity\TodoItem;
+use App\Entity\TodoList;
 use App\Form\TodoItemType;
 use App\Repository\TodoItemRepository;
 use App\Repository\TodoListRepository;
@@ -14,9 +15,12 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 
 /**
  * @Rest\RouteResource("Item")
+ * @SWG\Tag(name="Items")
  */
 class TodoItemController extends AbstractFOSRestController implements ClassResourceInterface
 {
@@ -46,11 +50,29 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      * @Rest\Get(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
      *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Json List object with collection of Items",
+     *     @Model(type=TodoList::class, groups={"Default", "items"})
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
      * @param int $listId
      *
      * @return View
      * @throws \Doctrine\ORM\NoResultException
      * @throws \Doctrine\ORM\NonUniqueResultException
+     *
      */
     public function cgetAction(int $listId): View
     {
@@ -66,6 +88,33 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
     /**
      * @Rest\Post(requirements={"listId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="body",
+     *     @SWG\Schema(ref=@Model(type=TodoItemType::class))
+     * )
+     * @SWG\Response(
+     *     response=201,
+     *     description="Json object with created Item",
+     *     @Model(type=TodoItem::class, groups={"Default"})
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Bad Request",
+     *     @SWG\Schema(ref="#definitions/ErrorBadRequest")
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
      *
      * @param int     $listId
      * @param Request $request
@@ -103,6 +152,29 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      * @Rest\Get(requirements={"listId" = "\d+", "itemId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "list"})
      *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Parameter(
+     *     name="itemId",
+     *     type="integer",*
+     *     in="path",
+     *     description="Item id"
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="Json with Item object",
+     *     @Model(type=TodoItem::class, groups={"Default", "list"})
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
      * @param int $listId
      * @param int $itemId
      *
@@ -122,6 +194,28 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
     /**
      * @Rest\Delete(requirements={"listId" = "\d+", "itemId" = "\d+"})
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
+     *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Parameter(
+     *     name="itemId",
+     *     type="integer",*
+     *     in="path",
+     *     description="Item id"
+     * )
+     * @SWG\Response(
+     *     response=204,
+     *     description="",
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
      *
      * @param int $listId
      * @param int $itemId

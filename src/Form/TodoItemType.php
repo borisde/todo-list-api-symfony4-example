@@ -20,7 +20,11 @@ class TodoItemType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('description', TextType::class);
+        $builder->add('description', TextType::class, [
+            'documentation' => [
+                'description' => 'Item description.',
+            ],
+        ]);
     }
 
     /**
