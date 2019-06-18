@@ -98,5 +98,25 @@ class FeatureContext implements Context
 
         $this->em->flush();
     }
+
+    /**
+     * @Given there are :itemsCount Items with description :description
+     */
+    public function thereAreItemsWithDescription(int $itemsCount, string $description)
+    {
+        for ($i = 0; $i < $itemsCount; $i++) {
+            $list = new TodoList();
+            $list->setTitle('List '.($i+1));
+            $this->em->persist($list);
+
+            $item = new TodoItem();
+            $item->setDescription($description);
+            $item->setList($list);
+            $this->em->persist($item);
+        }
+
+        $this->em->flush();
+    }
+
 }
 
