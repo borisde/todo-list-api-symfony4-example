@@ -13,6 +13,6 @@ default:
                 class: App\Kernel
         Imbo\BehatApiExtension:
             apiClient:
-                base_uri: http://localhost
+                base_uri: http://localhost/api/
                 timeout: 15.0
                 verify: false

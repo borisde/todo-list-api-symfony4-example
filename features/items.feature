@@ -4,7 +4,7 @@ Feature: Item features
 		Given there are 2 Lists with 4 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/2/items" using HTTP GET
+		When I request "lists/2/items" using HTTP GET
 		Then the response code is 200
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
@@ -22,7 +22,7 @@ Feature: Item features
 	Scenario: Items List ID must be numeric
 		Given the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/abc/items" using HTTP GET
+		When I request "lists/abc/items" using HTTP GET
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -37,7 +37,7 @@ Feature: Item features
 		Given there are 2 Lists with 3 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/3" using HTTP GET
+		When I request "lists/1/items/3" using HTTP GET
 		Then the response code is 200
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
@@ -59,7 +59,7 @@ Feature: Item features
 	Scenario: Item ID must be numeric
 		Given the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/a" using HTTP GET
+		When I request "lists/1/items/a" using HTTP GET
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -74,7 +74,7 @@ Feature: Item features
 		Given there are 2 Lists with 2 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/3" using HTTP GET
+		When I request "lists/1/items/3" using HTTP GET
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -88,7 +88,7 @@ Feature: Item features
 	Scenario: Request a single Item with not allowed method POST
 		Given the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/1" using HTTP POST
+		When I request "lists/1/items/1" using HTTP POST
 		Then the response code is 405
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -109,7 +109,7 @@ Feature: Item features
             "description": "Test1"
         }
         """
-		When I request "/api/lists/1/items" using HTTP POST
+		When I request "lists/1/items" using HTTP POST
 		Then the response code is 201
 		And the "Content-Type" response header is "application/json"
 		And the "Location" response header exists
@@ -133,7 +133,7 @@ Feature: Item features
             "title": "Test2"
         }
         """
-		When I request "/api/lists/1/items" using HTTP POST
+		When I request "lists/1/items" using HTTP POST
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -163,7 +163,7 @@ Feature: Item features
             "description": "Test1", "id": 101
         }
         """
-		When I request "/api/lists/1/items" using HTTP POST
+		When I request "lists/1/items" using HTTP POST
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -184,7 +184,7 @@ Feature: Item features
           "description": ""
         }
         """
-		When I request "/api/lists/1/items" using HTTP POST
+		When I request "lists/1/items" using HTTP POST
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -205,7 +205,7 @@ Feature: Item features
             "descriptionnn": ""
         }
         """
-		When I request "/api/lists/1/items" using HTTP POST
+		When I request "lists/1/items" using HTTP POST
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -226,7 +226,7 @@ Feature: Item features
             "description": ""
         }
         """
-		When I request "/api/lists/a/items" using HTTP POST
+		When I request "lists/a/items" using HTTP POST
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -241,7 +241,7 @@ Feature: Item features
 		Given there are 2 Lists with 2 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/2" using HTTP DELETE
+		When I request "lists/1/items/2" using HTTP DELETE
 		Then the response code is 204
 		And the response reason phrase is "No Content"
 	
@@ -249,7 +249,7 @@ Feature: Item features
 		Given there are 2 Lists with 2 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/1/items/a" using HTTP DELETE
+		When I request "lists/1/items/a" using HTTP DELETE
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
@@ -264,7 +264,7 @@ Feature: Item features
 		Given there are 2 Lists with 2 Items each
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "/api/lists/aa/items/1" using HTTP DELETE
+		When I request "lists/aa/items/1" using HTTP DELETE
 		Then the response code is 404
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
