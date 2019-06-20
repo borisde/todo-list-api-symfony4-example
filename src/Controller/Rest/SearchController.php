@@ -34,7 +34,7 @@ class SearchController extends AbstractFOSRestController
     }
 
     /**
-     * @Rest\QueryParam(name="query", requirements="[A-Za-z0-9\s]+", strict=true)
+     * @Rest\QueryParam(name="query", requirements=".{1,25}", strict=true)
      * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "list"})
      *
      * @SWG\Parameter(
