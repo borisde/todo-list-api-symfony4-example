@@ -22,11 +22,11 @@ Feature: Search features
 		And the "Allow" response header is "GET"
 		And the response body is an empty JSON array
 	
-	Scenario: Search query should match the pattern [A-Za-z0-9\s]+
+	Scenario: Search query should match the pattern .{1,25}
 		Given there are 1 Items with description "some item description"
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "search/items?query=test..test" using HTTP GET
+		When I request "search/items?query=test..testtest..testtest..testtest..testtest..testtest..testtest..testtest..testtest..test" using HTTP GET
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
@@ -43,7 +43,7 @@ Feature: Search features
 		Given there are 1 Items with description "some item description"
 		And the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
-		When I request "search/items?query=test..test" using HTTP GET
+		When I request "search/items" using HTTP GET
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
