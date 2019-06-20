@@ -9,15 +9,7 @@ Feature: Item features
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
 		And the "Allow" response header is "GET, POST"
-		And the response body contains JSON:
-        """
-        {
-            "id": "@variableType(integer)",
-            "title": "@variableType(string)",
-            "created_at": "@variableType(string)",
-            "items": "@arrayLength(4)"
-        }
-        """
+		And the response body is a JSON array of length 4
 	
 	Scenario: Items List ID must be numeric
 		Given the "Content-Type" request header is "application/json"

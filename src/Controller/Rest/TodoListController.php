@@ -16,7 +16,6 @@ use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 
-
 /**
  * @Rest\RouteResource("List")
  * @SWG\Tag(name="Lists")
@@ -43,7 +42,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
      *
      * @SWG\Response(
      *     response=200,
-     *     description="Json array with collection of Lists",
+     *     description="Json array with a collection of Lists",
      *     @SWG\Schema(
      *           type="array",
      *           @Model(type=TodoList::class, groups={"Default", "items_count"})

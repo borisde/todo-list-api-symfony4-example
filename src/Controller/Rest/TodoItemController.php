@@ -48,7 +48,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
 
     /**
      * @Rest\Get(requirements={"listId" = "\d+"})
-     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default", "items"})
+     * @Rest\View(populateDefaultVars=false, serializerGroups={"Default"})
      *
      * @SWG\Parameter(
      *     name="listId",
@@ -58,8 +58,11 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Json List object with collection of Items",
-     *     @Model(type=TodoList::class, groups={"Default", "items"})
+     *     description="Json array with a collection of List Items",
+     *     @SWG\Schema(
+     *           type="array",
+     *           @Model(type=TodoList::class, groups={"Default"})
+     *     )
      * )
      * @SWG\Response(
      *     response=404,
@@ -76,11 +79,13 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
      */
     public function cgetAction(int $listId): View
     {
-        $listItems = $this->todoListRepository->findListJoinItems($listId);
+        $list = $this->todoListRepository->findOneBy(['id' => $listId]);
 
-        if (!$listItems) {
+        if (!$list) {
             throw new ResourceNotFoundException('Not found');
         }
+
+        $listItems = $this->todoItemRepository->findBy(['list' => $list]);
 
         return $this->view($listItems, Response::HTTP_OK);
     }

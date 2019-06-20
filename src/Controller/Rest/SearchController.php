@@ -45,7 +45,7 @@ class SearchController extends AbstractFOSRestController
      * )
      * @SWG\Response(
      *     response=200,
-     *     description="Json array with collection of Items",
+     *     description="Json array with a collection of Items",
      *     @SWG\Schema(
      *           type="array",
      *           @Model(type=TodoItem::class, groups={"Default", "list"})
