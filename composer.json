@@ -1,6 +1,8 @@
 {
+    "name": "borisde/todo-list-api-symfony4-example",
     "type": "project",
-    "license": "proprietary",
+    "description": "An example of ToDo-list REST API built with Symfony 4 and FOSRestBundle",
+    "license": "MIT",
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
