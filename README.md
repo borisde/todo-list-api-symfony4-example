@@ -24,6 +24,7 @@ But in addition we need to implement the searching feature:
 
 ## References
 
++ [Symfony](https://github.com/symfony)
 + [FOSRestBundle](https://github.com/FriendsOfSymfony/FOSRestBundle)
 + [JMSSerializerBundle](https://github.com/schmittjoh/JMSSerializerBundle)
 + [NelmioApiDocBundle](https://github.com/nelmio/NelmioApiDocBundle)
@@ -33,4 +34,6 @@ But in addition we need to implement the searching feature:
 + [Behat](https://github.com/Behat/Behat)
 + [Behat API Extension](https://github.com/imbo/behat-api-extension)
 
+## License
 
+This work is under MIT license.
