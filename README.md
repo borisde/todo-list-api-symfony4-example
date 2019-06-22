@@ -21,6 +21,28 @@ But in addition we need to implement the searching feature:
    **Second Important ToDo** (`items: Text, Another item name, Some more item`).    
    If I'm searching for `some` I have to get both ToDos in search results, as in each ToDo list exist Item with word `some` (`Some item` in First ToDo and `Some more item` in Second ToDo).
 
+## Install
+
+Clone repository:  
+
+`git clone https://github.com/borisde/todo-list-api-symfony4-example.git todo_api_backend && cd todo_api_backend`
+
+Install dependencies:
+
+`composer install`  
+
+Set DB credentials in .env file:   
+
+`DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name`
+
+Create DB structure:  
+
+```
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+```
+
+Set your web server to serve PHP from `todo_api_backend/public` directory.
 
 ## References
 
