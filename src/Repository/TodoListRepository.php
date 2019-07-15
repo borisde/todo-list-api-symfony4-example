@@ -74,7 +74,7 @@ class TodoListRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(TodoList $list): void
+    public function save(TodoList $list): void
     {
         $this->_em->persist($list);
         $this->_em->flush();

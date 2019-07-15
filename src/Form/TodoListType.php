@@ -22,6 +22,7 @@ class TodoListType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('title', TextType::class, [
+            'empty_data'  => '',
             'documentation' => [
                 'description' => 'List title.',
             ],

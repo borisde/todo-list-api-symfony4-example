@@ -19,7 +19,7 @@ Feature: List features
 		Then the response code is 200
 		And the "Content-Type" response header is "application/json"
 		And the "Allow" response header exists
-		And the "Allow" response header is "GET, DELETE"
+		And the "Allow" response header is "GET, DELETE, PUT"
 		And the response body contains JSON:
         """
         {
@@ -224,5 +224,84 @@ Feature: List features
         {
             "code": 404,
             "message": "@variableType(string)"
+        }
+        """
+	
+	Scenario: Updating List title with PUT
+		Given there are 1 Lists with 1 Items each
+		And the "Content-Type" request header is "application/json"
+		And the "Accept" request header is "application/json"
+		And the request body is:
+        """
+		{
+			"title": "new title"
+		}
+        """
+		When I request "lists/1" using HTTP PUT
+		Then the response code is 200
+		And the "Content-Type" response header is "application/json"
+		And the response body is:
+		"""
+		"""
+	
+	Scenario: Updated List title must not be blank
+		Given there are 1 Lists with 1 Items each
+		And the "Content-Type" request header is "application/json"
+		And the "Accept" request header is "application/json"
+		And the request body is:
+        """
+		{
+			"title": ""
+		}
+        """
+		When I request "lists/1" using HTTP PUT
+		Then the response code is 400
+		And the "Content-Type" response header is "application/json"
+		And the response body contains JSON:
+        """
+        {
+            "code": 400,
+            "message": "Validation Failed"
+        }
+        """
+	
+	Scenario: Updated non-existing List
+		Given there are 2 Lists with 1 Items each
+		And the "Content-Type" request header is "application/json"
+		And the "Accept" request header is "application/json"
+		And the request body is:
+        """
+		{
+			"title": "new title"
+		}
+        """
+		When I request "lists/3" using HTTP PUT
+		Then the response code is 404
+		And the "Content-Type" response header is "application/json"
+		And the response body contains JSON:
+        """
+        {
+            "code": 404,
+            "message": "Not found"
+        }
+        """
+	
+	Scenario: Updated List must not contain extra fields
+		Given the "Content-Type" request header is "application/json"
+		And the "Accept" request header is "application/json"
+		And the request body is:
+        """
+        {
+            "title": "Test7878", "id": 101
+        }
+        """
+		When I request "lists" using HTTP POST
+		Then the response code is 400
+		And the "Content-Type" response header is "application/json"
+		And the response body contains JSON:
+        """
+        {
+            "code": 400,
+            "message": "Validation Failed"
         }
         """

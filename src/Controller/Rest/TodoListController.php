@@ -97,7 +97,7 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
             return $this->view($form, Response::HTTP_BAD_REQUEST);
         }
 
-        $this->todoListRepository->create($list);
+        $this->todoListRepository->save($list);
 
         $location = $request->getPathInfo().'/'.$list->getId();
 
@@ -180,6 +180,63 @@ class TodoListController extends AbstractFOSRestController implements ClassResou
 
         // 204 HTTP NO CONTENT response. The object is deleted.
         return $this->view(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Rest\Put(requirements={"listId" = "\d+"})
+     *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="body",
+     *     @SWG\Schema(ref=@Model(type=TodoListType::class))
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="",
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Bad Request",
+     *     @SWG\Schema(ref="#definitions/ErrorBadRequest")
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
+     * @param int     $listId
+     * @param Request $request
+     *
+     * @return View
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function putAction(int $listId, Request $request): View
+    {
+        $list = $this->todoListRepository->findOneBy(['id' => $listId]);
+
+        if (!$list) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        $form = $this->createForm(TodoListType::class, $list);
+
+        $form->submit($request->request->all(), false);
+        if (!$form->isValid()) {
+            return $this->view($form, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->todoListRepository->save($list);
+
+        // 200 HTTP OK response.
+        return $this->view(null, Response::HTTP_OK);
     }
 }
 
