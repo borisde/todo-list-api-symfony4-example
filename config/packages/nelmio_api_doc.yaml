@@ -17,16 +17,6 @@ nelmio_api_doc:
                         example: "Validation Failed"
                     errors:
                         type: object
-                        properties:
-                            children:
-                                type: object
-                                properties:
-                                    title:
-                                        type: object
-                                        properties:
-                                            errors:
-                                                type: array
-                                                example: ["This value should not be blank."]
             ErrorNotFound:
                 type: object
                 properties:
