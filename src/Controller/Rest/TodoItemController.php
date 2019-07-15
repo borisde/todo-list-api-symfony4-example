@@ -146,7 +146,7 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
             return $this->view($form, Response::HTTP_BAD_REQUEST);
         }
 
-        $this->todoItemRepository->create($item);
+        $this->todoItemRepository->save($item);
 
         $location = $request->getPathInfo().'/'.$item->getId();
 
@@ -246,6 +246,75 @@ class TodoItemController extends AbstractFOSRestController implements ClassResou
 
         // 204 HTTP NO CONTENT response. The object is deleted.
         return $this->view(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @Rest\Put(requirements={"listId" = "\d+", "itemId" = "\d+"})
+     *
+     * @SWG\Parameter(
+     *     name="listId",
+     *     type="integer",*
+     *     in="path",
+     *     description="List id"
+     * )
+     * @SWG\Parameter(
+     *     name="itemId",
+     *     type="integer",*
+     *     in="path",
+     *     description="Item id"
+     * )
+     * @SWG\Parameter(
+     *     name="title",
+     *     in="body",
+     *     @SWG\Schema(ref=@Model(type=TodoItemType::class))
+     * )
+     * @SWG\Response(
+     *     response=200,
+     *     description="",
+     * )
+     * @SWG\Response(
+     *     response=400,
+     *     description="Bad Request",
+     *     @SWG\Schema(ref="#definitions/ErrorBadRequest")
+     * )
+     * @SWG\Response(
+     *     response=404,
+     *     description="Not found",
+     *     @SWG\Schema(ref="#definitions/ErrorNotFound")
+     * )
+     *
+     * @param int $listId
+     * @param int $itemId
+     * @param Request $request
+     *
+     * @return View
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function putAction(int $listId, int $itemId, Request $request): View
+    {
+        $item = $this->todoItemRepository->findOneBy(
+            [
+                'id'   => $itemId,
+                'list' => $listId,
+            ]
+        );
+
+        if (!$item) {
+            throw new ResourceNotFoundException('Not found');
+        }
+
+        $form = $this->createForm(TodoItemType::class, $item);
+
+        $form->submit($request->request->all(), false);
+        if (!$form->isValid()) {
+            return $this->view($form, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->todoItemRepository->save($item);
+
+        // 200 HTTP OK response.
+        return $this->view(null, Response::HTTP_OK);
     }
 }
 

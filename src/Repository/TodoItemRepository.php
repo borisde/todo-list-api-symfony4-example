@@ -60,7 +60,7 @@ class TodoItemRepository extends ServiceEntityRepository
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function create(TodoItem $item): void
+    public function save(TodoItem $item): void
     {
         $this->_em->persist($item);
         $this->_em->flush();
