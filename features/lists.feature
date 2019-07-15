@@ -287,15 +287,16 @@ Feature: List features
         """
 	
 	Scenario: Updated List must not contain extra fields
+		Given there are 1 Lists with 3 Items each
 		Given the "Content-Type" request header is "application/json"
 		And the "Accept" request header is "application/json"
 		And the request body is:
         """
         {
-            "title": "Test7878", "id": 101
+            "title": "new title", "id": 101
         }
         """
-		When I request "lists" using HTTP POST
+		When I request "lists/1" using HTTP PUT
 		Then the response code is 400
 		And the "Content-Type" response header is "application/json"
 		And the response body contains JSON:
