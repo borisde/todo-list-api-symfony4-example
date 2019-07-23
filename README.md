@@ -9,17 +9,17 @@ There have to be the following possibilities:
 
 3) List all ToDo lists
 
-Every ToDo can have a list of items. There has to be the possibility to add items to ToDo list, remove items from ToDo list. But it is not needed to update items in ToDo list.
+Every ToDo can have a list of items. There has to be the possibility to add items to ToDo list, remove items from ToDo list, update items in ToDo list.
 
-Also, it is not needed to update ToDo list itself (title for example) - just create, view and list all ToDo lists.
-
-But in addition we need to implement the searching feature:
+In addition we need to implement the searching feature:
 
 4) Search in all ToDo lists items. For example if there are two ToDos: 
    
    **First ToDo** (`items: Some item, Another item, Third Item`).  
    **Second Important ToDo** (`items: Text, Another item name, Some more item`).    
    If I'm searching for `some` I have to get both ToDos in search results, as in each ToDo list exist Item with word `some` (`Some item` in First ToDo and `Some more item` in Second ToDo).
+
+**[>>> Live demo on Heroku](https://todol-backend.herokuapp.com/api/doc)**
 
 ## Install
 
