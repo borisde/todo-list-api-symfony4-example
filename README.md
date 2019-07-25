@@ -27,6 +27,10 @@ Clone repository:
 
 `git clone https://github.com/borisde/todo-list-api-symfony4-example.git todo_api_backend && cd todo_api_backend`
 
+Install dependencies:
+
+`composer install`  or `composer install --no-dev` for `prod` environment
+
 Set DB credentials in .env file:   
 
 `DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name`
@@ -35,12 +39,8 @@ Create DB structure:
 
 ```
 php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
 ```
-
-Install dependencies:
-
-`composer install`  or `composer install --no-dev` for `prod` environment
-
 
 Set your web server to serve PHP from `todo_api_backend/public` directory.
 
